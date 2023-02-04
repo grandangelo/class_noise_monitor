@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace ClassNoiseMonitor
 {
-    class MainWindowViewModel : INotifyPropertyChanged
+    internal class MainWindowViewModel : INotifyPropertyChanged
     {
         #region Private Members
+        private readonly Model _model;
         #endregion
 
         #region Public Members
@@ -20,6 +21,8 @@ namespace ClassNoiseMonitor
         #region Constructor
         public MainWindowViewModel()
         {
+            _model = new Model();
+            _model.UpdatedVolumeEvent += OnUpdatedVolumeEvent;
             CurrentVolume = 10;
         }
         #endregion
@@ -27,7 +30,11 @@ namespace ClassNoiseMonitor
         #region Public Methods
         #endregion
 
-        #region Private Members
+        #region Private Methods
+        private void OnUpdatedVolumeEvent(object? sender, VolumeUpdateEvent e)
+        {
+            CurrentVolume = e.UpdateVolume;
+        }
         #endregion
 
         #region INotify Support
