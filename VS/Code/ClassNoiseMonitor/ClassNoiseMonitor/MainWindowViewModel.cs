@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ClassNoiseMonitor
 {
@@ -17,6 +18,7 @@ namespace ClassNoiseMonitor
 
         #region Public Members
         public int CurrentVolume { get => _currentVolume; set { if (value == _currentVolume) return; _currentVolume = value; OnPropertyChanged(); } }
+        public ICommand StartMonitoringCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -24,11 +26,19 @@ namespace ClassNoiseMonitor
         {
             _model = new Model();
             _model.UpdatedVolumeEvent += OnUpdatedVolumeEvent;
+            StartMonitoringCommand = new RelayCommand(StartMonitoring);
             CurrentVolume = 10;
         }
         #endregion
 
         #region Public Methods
+        #endregion
+
+        #region Command Support
+        private void StartMonitoring(object parameters)
+        {
+            _model.StartMonitoring();
+        }
         #endregion
 
         #region Private Methods
