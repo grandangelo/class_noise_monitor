@@ -27,7 +27,7 @@ namespace ClassNoiseMonitor
             _model = new Model();
             _model.UpdatedVolumeEvent += OnUpdatedVolumeEvent;
             StartMonitoringCommand = new RelayCommand(StartMonitoring);
-            CurrentVolume = 10;
+            CurrentVolume = 0;
         }
         #endregion
 
@@ -37,7 +37,7 @@ namespace ClassNoiseMonitor
         #region Command Support
         private void StartMonitoring(object parameters)
         {
-            _model.StartMonitoring();
+            Task.Run(() => _model.StartMonitoring());
         }
         #endregion
 
