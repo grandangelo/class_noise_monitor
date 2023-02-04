@@ -12,10 +12,11 @@ namespace ClassNoiseMonitor
     {
         #region Private Members
         private readonly Model _model;
+        private int _currentVolume;
         #endregion
 
         #region Public Members
-        public int CurrentVolume { get; set; }
+        public int CurrentVolume { get => _currentVolume; set { if (value == _currentVolume) return; _currentVolume = value; OnPropertyChanged(); } }
         #endregion
 
         #region Constructor

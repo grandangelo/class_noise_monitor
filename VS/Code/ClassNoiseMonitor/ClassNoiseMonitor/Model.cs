@@ -17,6 +17,10 @@ namespace ClassNoiseMonitor
         #endregion
 
         #region Constructor
+        public Model()
+        {
+
+        }
         #endregion
 
         #region Public Methods
