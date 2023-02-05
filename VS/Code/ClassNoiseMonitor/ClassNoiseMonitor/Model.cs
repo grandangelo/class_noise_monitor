@@ -1,18 +1,22 @@
 ﻿using NAudio.CoreAudioApi;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ClassNoiseMonitor
 {
     internal class Model
     {
         #region Private Members
-        MMDevice? _microphone;
+        private static readonly int _updatePeriod_ms = 250;
+        private int _maxVolume;
+        private MMDevice? _microphone;
         #endregion
 
         #region Public Members
@@ -32,13 +36,21 @@ namespace ClassNoiseMonitor
         #region Public Methods
         public void StartMonitoring(CancellationToken ct)
         {
+            var sw = new Stopwatch();
+            sw.Start();
             GetMicrophoneDevice();
             while (!ct.IsCancellationRequested)
             {
                 try
                 {
-                    UpdateMicrophoneVolume();
-                    Thread.Sleep(10);
+                    var currentVolume = (_microphone?.AudioMeterInformation.MasterPeakValue * 100) ?? int.MaxValue;
+                    _maxVolume = Math.Max(_maxVolume, (int)currentVolume);
+                    if (sw.ElapsedMilliseconds > _updatePeriod_ms)
+                    {
+                        UpdatedVolumeEvent?.Invoke(this, new VolumeUpdateEvent(_maxVolume));
+                        _maxVolume = 0;
+                        sw.Restart();
+                    }
                 }
                 catch
                 {
@@ -54,12 +66,6 @@ namespace ClassNoiseMonitor
             var deviceEnumerator = new MMDeviceEnumerator();
             var devices = deviceEnumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active);
             _microphone = devices.First(d => d.DataFlow == DataFlow.Capture);
-        }
-
-        private void UpdateMicrophoneVolume()
-        {
-            var currentVolume = (_microphone?.AudioMeterInformation.MasterPeakValue * 100) ?? int.MaxValue;
-            UpdatedVolumeEvent?.Invoke(this, new VolumeUpdateEvent((int)currentVolume));
         }
         #endregion
     }
