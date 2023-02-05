@@ -3,3 +3,5 @@ My wife needs a noise monitor to let her young students know that they're speaki
 
 Circulare Gauge code from https://www.codeproject.com/Articles/38361/Circular-Gauge-Custom-Control-for-Silverlight-and (BSD License)
 Icon from https://icon-library.com/icon/noise-icon-3.html
+
+![Alt text](/Images/Sample.png?raw=true "Sample Image")
