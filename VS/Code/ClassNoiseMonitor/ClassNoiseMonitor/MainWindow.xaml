@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClassNoiseMonitor"
-        d:DataContext="{d:DesignInstance Type=local:MainWindowVMMock, IsDesignTimeCreatable=True}"
+        xmlns:gauge="clr-namespace:CircularGauge;assembly=CircularGauge"
+       d:DataContext="{d:DesignInstance Type=local:MainWindowVMMock, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
         Title="Class Noise Monitor" Height="450" Width="800" Closed="Window_Closed">
     <Window.DataContext>
@@ -13,17 +14,44 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0"
-               Grid.Column="0"
-               Content="Current Microphone Volume"/>
-        <Label Grid.Row="0"
-               Grid.Column="1"
-               Content="{Binding CurrentVolume}"/>
+        <gauge:CircularGaugeControl Grid.Column="0" 
+                                    Grid.Row="0" 
+                                    Radius="150" 
+                                    ScaleRadius="110" 
+                                    ScaleStartAngle="120" 
+                                    ScaleSweepAngle="300"
+                                    PointerLength="85" 
+                                    PointerCapRadius="35" 
+                                    MinValue="0" 
+                                    MaxValue="1000" 
+                                    MajorDivisionsCount="10" 
+                                    MinorDivisionsCount="5" 
+                                    CurrentValue="{Binding Score}"
+                                    ImageSize="40,50"
+                                    RangeIndicatorThickness="8"
+                                    RangeIndicatorRadius="120"
+                                    RangeIndicatorLightRadius="10"
+                                    RangeIndicatorLightOffset="80"
+                                    ScaleLabelRadius="90"
+                                    ScaleLabelSize="40,20"
+                                    ScaleLabelFontSize="10"
+                                    ScaleLabelForeground="LightGray"
+                                    MajorTickSize="10,3"
+                                    MinorTickSize="3,1"
+                                    MajorTickColor="LightGray"
+                                    MinorTickColor="LightGray"
+                                    ImageOffset="-50"
+                                    GaugeBackgroundColor="Black"
+                                    PointerThickness ="16"
+                                    OptimalRangeStartValue="300"
+                                    OptimalRangeEndValue="700" 
+                                    DialTextOffset="40" 
+                                    DialText="Black"
+                                    DialTextColor="Black">
+        </gauge:CircularGaugeControl>
     </Grid>
 </Window>
