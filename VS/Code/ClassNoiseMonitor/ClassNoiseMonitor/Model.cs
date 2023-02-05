@@ -44,15 +44,14 @@ namespace ClassNoiseMonitor
         private void OnDataAvailable(object? sender, WaveInEventArgs e)
         {
             float max = 0;
-            var buffer = new WaveBuffer(e.Buffer);
-            for (int index = 0; index < e.BytesRecorded / 4; index++)
+            for (int index = 0; index < e.BytesRecorded; index += 2)
             {
-                var sample = buffer.FloatBuffer[index];
-
-                if (sample < 0) sample = -sample;
-                if (sample > max) max = sample;
+                short sample = (short)((e.Buffer[index + 1] << 8) |
+                                        e.Buffer[index + 0]);
+                var sample32 = sample / 32768f;
+                if (sample32 < 0) sample32 = -sample32;
+                if (sample32 > max) max = sample32;
             }
-
             UpdatedVolumeEvent?.Invoke(this, new VolumeUpdateEvent((int)(max * 100), max));
         }
         #endregion
