@@ -5,7 +5,12 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>noise-icon-3.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="noise-icon-3.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NAudio" Version="2.1.0" />

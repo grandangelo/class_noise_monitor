@@ -5,15 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClassNoiseMonitor"
         xmlns:gauge="clr-namespace:CircularGauge;assembly=CircularGauge"
-       d:DataContext="{d:DesignInstance Type=local:MainWindowVMMock, IsDesignTimeCreatable=True}"
+        d:DataContext="{d:DesignInstance Type=local:MainWindowVMMock, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
-        Title="Class Noise Monitor" Height="450" Width="800" Closed="Window_Closed">
+        Title="Class Noise Monitor" Height="500" Width="400" Closed="Window_Closed">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -27,10 +28,10 @@
                                     PointerLength="85" 
                                     PointerCapRadius="35" 
                                     MinValue="0" 
-                                    MaxValue="1000" 
+                                    MaxValue="100" 
                                     MajorDivisionsCount="10" 
                                     MinorDivisionsCount="5" 
-                                    CurrentValue="{Binding Score}"
+                                    CurrentValue="{Binding CurrentVolume}"
                                     ImageSize="40,50"
                                     RangeIndicatorThickness="8"
                                     RangeIndicatorRadius="120"
@@ -39,19 +40,22 @@
                                     ScaleLabelRadius="90"
                                     ScaleLabelSize="40,20"
                                     ScaleLabelFontSize="10"
-                                    ScaleLabelForeground="LightGray"
+                                    ScaleLabelForeground="Azure"
                                     MajorTickSize="10,3"
                                     MinorTickSize="3,1"
-                                    MajorTickColor="LightGray"
-                                    MinorTickColor="LightGray"
+                                    MajorTickColor="Blue"
+                                    MinorTickColor="Azure"
                                     ImageOffset="-50"
-                                    GaugeBackgroundColor="Black"
+                                    GaugeBackgroundColor="LightBlue"
+                                    BelowOptimalRangeColor="LimeGreen"
+                                    OptimalRangeColor="Yellow"
+                                    AboveOptimalRangeColor="OrangeRed"
                                     PointerThickness ="16"
-                                    OptimalRangeStartValue="300"
-                                    OptimalRangeEndValue="700" 
+                                    OptimalRangeStartValue="40"
+                                    OptimalRangeEndValue="70" 
                                     DialTextOffset="40" 
-                                    DialText="Black"
-                                    DialTextColor="Black">
+                                    DialText="Noise Meter"
+                                    DialTextColor="Blue">
         </gauge:CircularGaugeControl>
     </Grid>
 </Window>
