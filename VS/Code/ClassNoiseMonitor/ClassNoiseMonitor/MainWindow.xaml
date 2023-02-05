@@ -51,8 +51,8 @@
                                     OptimalRangeColor="Yellow"
                                     AboveOptimalRangeColor="OrangeRed"
                                     PointerThickness ="16"
-                                    OptimalRangeStartValue="10"
-                                    OptimalRangeEndValue="40" 
+                                    OptimalRangeStartValue="{Binding MediumNoiseThreshold}"
+                                    OptimalRangeEndValue="{Binding HighNoiseThreshold}" 
                                     DialTextOffset="40" 
                                     DialText="Noise Meter"
                                     DialTextColor="Blue">

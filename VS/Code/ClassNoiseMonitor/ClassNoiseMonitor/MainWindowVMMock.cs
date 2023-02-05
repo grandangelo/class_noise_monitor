@@ -14,6 +14,8 @@ namespace ClassNoiseMonitor
         #endregion
 
         #region Public Members
+        public int MediumNoiseThreshold { get; set; } = 10;
+        public int HighNoiseThreshold { get; set; } = 40;
         #endregion
 
         #region Events
