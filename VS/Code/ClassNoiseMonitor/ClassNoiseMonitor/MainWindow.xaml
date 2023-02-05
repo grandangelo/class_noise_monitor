@@ -51,11 +51,17 @@
                                     OptimalRangeColor="Yellow"
                                     AboveOptimalRangeColor="OrangeRed"
                                     PointerThickness ="16"
-                                    OptimalRangeStartValue="40"
-                                    OptimalRangeEndValue="70" 
+                                    OptimalRangeStartValue="10"
+                                    OptimalRangeEndValue="40" 
                                     DialTextOffset="40" 
                                     DialText="Noise Meter"
                                     DialTextColor="Blue">
         </gauge:CircularGaugeControl>
+        <Label Grid.Row="1"
+               HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Center"
+               FontSize="24"
+               FontWeight="Bold"
+               Content="{Binding LabelContent}"/>
     </Grid>
 </Window>
