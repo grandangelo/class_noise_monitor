@@ -30,10 +30,10 @@ namespace ClassNoiseMonitor
         #endregion
 
         #region Public Methods
-        public void StartMonitoring()
+        public void StartMonitoring(CancellationToken ct)
         {
             GetMicrophoneDevice();
-            while (true)
+            while (!ct.IsCancellationRequested)
             {
                 try
                 {

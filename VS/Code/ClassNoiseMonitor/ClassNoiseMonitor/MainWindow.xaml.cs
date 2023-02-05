@@ -24,5 +24,13 @@ namespace ClassNoiseMonitor
         {
             InitializeComponent();
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (DataContext is MainWindowViewModel vm)
+            {
+                vm.Dispose();
+            }
+        }
     }
 }
