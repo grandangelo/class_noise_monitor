@@ -15,7 +15,9 @@ namespace ClassNoiseMonitor
         #region Private Members
         private readonly CfgManager _cfgManager;
         private readonly Model _model;
+        private readonly List<int> _volumes;
         private int _currentVolume;
+        private int _currentVolumeIndex;
         private float _rawVolume;
         private string _lowNoiseMessage = string.Empty;
         private string _mediumNoiseMessage = string.Empty;
@@ -36,7 +38,8 @@ namespace ClassNoiseMonitor
         {
             _cfgManager = new CfgManager();
             ReadCfg();
-            _model = new Model();
+            _volumes = new List<int>(new int[_cfgManager.VolumeElements]);
+            _model = new Model(_cfgManager);
             _model.UpdatedVolumeEvent += OnUpdatedVolumeEvent;
             _model.StartMonitoring();
         }
@@ -61,8 +64,9 @@ namespace ClassNoiseMonitor
 
         private void OnUpdatedVolumeEvent(object? sender, VolumeUpdateEvent e)
         {
-            CurrentVolume = e.UpdateVolume;
             RawVolume = e.RawVolume;
+            PopulateVolumes(e.UpdatedVolume);
+            CurrentVolume = _volumes.Max();
             LabelContent = GetLabelContent();
         }
 
@@ -84,6 +88,16 @@ namespace ClassNoiseMonitor
             }
 
             return label;
+        }
+
+        private void PopulateVolumes(int volume)
+        {
+            _volumes[_currentVolumeIndex] = volume;
+            _currentVolumeIndex++;
+            if (_currentVolumeIndex >= _cfgManager.VolumeElements)
+            {
+                _currentVolumeIndex = 0;
+            }
         }
         #endregion
 

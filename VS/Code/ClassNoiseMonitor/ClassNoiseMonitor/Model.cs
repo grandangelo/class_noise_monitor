@@ -16,6 +16,7 @@ namespace ClassNoiseMonitor
     {
         #region Private Members
         private readonly WaveInEvent _waveIn;
+        private readonly CfgManager _cfgManager;
         #endregion
 
         #region Public Members
@@ -26,9 +27,10 @@ namespace ClassNoiseMonitor
         #endregion
 
         #region Constructor
-        public Model()
+        public Model(CfgManager cfgManager)
         {
             _waveIn = new WaveInEvent();
+            _cfgManager = cfgManager;
         }
         #endregion
 
@@ -52,7 +54,7 @@ namespace ClassNoiseMonitor
                 if (sample32 < 0) sample32 = -sample32;
                 if (sample32 > max) max = sample32;
             }
-            UpdatedVolumeEvent?.Invoke(this, new VolumeUpdateEvent((int)(max * 100), max));
+            UpdatedVolumeEvent?.Invoke(this, new VolumeUpdateEvent((int)(max * _cfgManager.CorrectiveFactor), max));
         }
         #endregion
 

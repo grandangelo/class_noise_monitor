@@ -18,8 +18,10 @@ namespace ClassNoiseMonitor
         #endregion
 
         #region Public Members
+        public int CorrectiveFactor { get; set; }
         public int LowNoiseMaxValue { get; set; }
         public int MediumNoiseMaxValue { get; set; }
+        public int VolumeElements { get; set; }
         public string LowNoiseMessage { get; set; } = string.Empty;
         public string MediumNoiseMessage { get; set; } = string.Empty;
         public string HighNoiseMessage { get; set; } = string.Empty;
@@ -40,8 +42,10 @@ namespace ClassNoiseMonitor
         {
             XDocument doc = XDocument.Load(_cfgFileName);
             var levels = doc?.Element("root")?.Element("levels");
+            CorrectiveFactor = Convert.ToInt32(levels?.Attribute("corrective_factor")?.Value ?? int.MaxValue.ToString());
             LowNoiseMaxValue = Convert.ToInt32(levels?.Element("low")?.Attribute("max_value")?.Value ?? int.MaxValue.ToString());
             MediumNoiseMaxValue = Convert.ToInt32(levels?.Element("medium")?.Attribute("max_value")?.Value ?? int.MaxValue.ToString());
+            VolumeElements = Convert.ToInt32(levels?.Attribute("volume_elements")?.Value ?? int.MaxValue.ToString());
             LowNoiseMessage = levels?.Element("low")?.Attribute("message")?.Value ?? "Invalid Message";
             MediumNoiseMessage = levels?.Element("medium")?.Attribute("message")?.Value ?? "Invalid Message";
             HighNoiseMessage = levels?.Element("high")?.Attribute("message")?.Value ?? "Invalid Message";

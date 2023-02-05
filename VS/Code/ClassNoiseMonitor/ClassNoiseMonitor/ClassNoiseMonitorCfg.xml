@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<levels>
+	<levels corrective_factor="100" volume_elements="5">
 		<low message="Ottimo!" max_value="10"/>
 		<medium message="Ragazzi attenzione..." max_value="40"/>
 		<high message ="SILENZIO!!"/>

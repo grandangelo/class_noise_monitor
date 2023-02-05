@@ -12,14 +12,14 @@ namespace ClassNoiseMonitor
         #endregion
 
         #region Public Members
-        public int UpdateVolume { get; private set; }
+        public int UpdatedVolume { get; private set; }
         public float RawVolume { get; private set; }
         #endregion
 
         #region Constructor
         public VolumeUpdateEvent(int updatedVolume, float rawVolume)
         {
-            UpdateVolume = updatedVolume;
+            UpdatedVolume = updatedVolume;
             RawVolume = rawVolume;
         }
         #endregion
