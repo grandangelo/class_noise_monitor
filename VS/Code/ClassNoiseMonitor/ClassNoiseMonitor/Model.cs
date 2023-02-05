@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace ClassNoiseMonitor
 {
-    internal class Model
+    internal class Model : IDisposable
     {
         #region Private Members
         private static readonly int _updatePeriod_ms = 250;
@@ -66,6 +66,28 @@ namespace ClassNoiseMonitor
             var deviceEnumerator = new MMDeviceEnumerator();
             var devices = deviceEnumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active);
             _microphone = devices.First(d => d.DataFlow == DataFlow.Capture);
+        }
+        #endregion
+
+        #region IDisposable Support
+        private bool _disposedValue;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _microphone?.Dispose();
+                }
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }
