@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ClassNoiseMonitor
 {
-    class MainWindowVMMock : MainWindowViewModel
+    class MainWindowVMMock
     {
         #region Private Members
         #endregion
@@ -20,6 +20,10 @@ namespace ClassNoiseMonitor
         #endregion
 
         #region Constructor
+        public MainWindowVMMock()
+        {
+            // Do nothing
+        }
         #endregion
 
         #region Public Methods

@@ -13,19 +13,20 @@ namespace ClassNoiseMonitor
     internal class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     {
         #region Private Members
-        private const int _mediumNoiseThreshold = 10;
-        private const int _highNoiseThreshold = 40;
-        private static readonly string _lowNoiseMessage = "Ottimo!";
-        private static readonly string _mediumNoiseMessage = "Ragazzi attenzione...";
-        private static readonly string _highNoiseMessage = "SILENZIO!";
+        private readonly CfgManager _cfgManager;
         private readonly Model _model;
         private readonly CancellationTokenSource _cts;
         private readonly Task _monitoringTask;
         private int _currentVolume;
-        private string _labelContent;
+        private string _lowNoiseMessage = string.Empty;
+        private string _mediumNoiseMessage = string.Empty;
+        private string _highNoiseMessage = string.Empty;
+        private string _labelContent = "No message";
         #endregion
 
         #region Public Members
+        public int MediumNoiseThreshold { get; set; }
+        public int HighNoiseThreshold { get; set; }
         public int CurrentVolume { get => _currentVolume; set { if (value == _currentVolume) return; _currentVolume = value; OnPropertyChanged(); } }
         public string LabelContent { get => _labelContent; set { if (value == _labelContent) return; _labelContent = value; OnPropertyChanged(); } }
         #endregion
@@ -33,13 +34,12 @@ namespace ClassNoiseMonitor
         #region Constructor
         public MainWindowViewModel()
         {
+            _cfgManager = new CfgManager();
+            ReadCfg();
             _cts = new CancellationTokenSource();
             _model = new Model();
             _model.UpdatedVolumeEvent += OnUpdatedVolumeEvent;
             _monitoringTask = Task.Run(() => _model.StartMonitoring(_cts.Token));
-            _labelContent = string.Empty;
-            CurrentVolume = 0;
-            LabelContent = string.Empty;
         }
         #endregion
 
@@ -50,6 +50,16 @@ namespace ClassNoiseMonitor
         #endregion
 
         #region Private Methods
+        private void ReadCfg()
+        {
+            _cfgManager.ReadCfg();
+            _lowNoiseMessage = _cfgManager.LowNoiseMessage;
+            _mediumNoiseMessage = _cfgManager.MediumNoiseMessage;
+            _highNoiseMessage = _cfgManager.HighNoiseMessage;
+            MediumNoiseThreshold = _cfgManager.LowNoiseMaxValue;
+            HighNoiseThreshold = _cfgManager.MediumNoiseMaxValue;
+        }
+
         private void OnUpdatedVolumeEvent(object? sender, VolumeUpdateEvent e)
         {
             CurrentVolume = e.UpdateVolume;
@@ -58,12 +68,22 @@ namespace ClassNoiseMonitor
 
         private string GetLabelContent()
         {
-            return CurrentVolume switch
+            string label;
+
+            if (CurrentVolume > HighNoiseThreshold)
             {
-                > _highNoiseThreshold => _highNoiseMessage,
-                > _mediumNoiseThreshold => _mediumNoiseMessage,
-                _ => _lowNoiseMessage,
-            };
+                label = _highNoiseMessage;
+            }
+            else if (CurrentVolume > MediumNoiseThreshold)
+            {
+                label = _mediumNoiseMessage;
+            }
+            else
+            {
+                label = _lowNoiseMessage;
+            }
+
+            return label;
         }
         #endregion
 

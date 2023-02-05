@@ -20,4 +20,10 @@
     <ProjectReference Include="..\..\CircularGauge\CircularGauge.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ClassNoiseMonitorCfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
