@@ -1,4 +1,5 @@
 ﻿using NAudio.CoreAudioApi;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,9 +15,7 @@ namespace ClassNoiseMonitor
     internal class Model : IDisposable
     {
         #region Private Members
-        private static readonly int _updatePeriod_ms = 250;
-        private int _maxVolume;
-        private MMDevice? _microphone;
+        private readonly WaveInEvent _waveIn;
         #endregion
 
         #region Public Members
@@ -29,43 +28,32 @@ namespace ClassNoiseMonitor
         #region Constructor
         public Model()
         {
-
+            _waveIn = new WaveInEvent();
         }
         #endregion
 
         #region Public Methods
-        public void StartMonitoring(CancellationToken ct)
+        public void StartMonitoring()
         {
-            var sw = new Stopwatch();
-            sw.Start();
-            GetMicrophoneDevice();
-            while (!ct.IsCancellationRequested)
-            {
-                try
-                {
-                    var currentVolume = (_microphone?.AudioMeterInformation.MasterPeakValue * 100) ?? int.MaxValue;
-                    _maxVolume = Math.Max(_maxVolume, (int)currentVolume);
-                    if (sw.ElapsedMilliseconds > _updatePeriod_ms)
-                    {
-                        UpdatedVolumeEvent?.Invoke(this, new VolumeUpdateEvent(_maxVolume));
-                        _maxVolume = 0;
-                        sw.Restart();
-                    }
-                }
-                catch
-                {
-
-                }
-            }
+            _waveIn.DataAvailable += OnDataAvailable;
+            _waveIn.StartRecording();
         }
         #endregion
 
         #region Private Methods
-        private void GetMicrophoneDevice()
+        private void OnDataAvailable(object? sender, WaveInEventArgs e)
         {
-            var deviceEnumerator = new MMDeviceEnumerator();
-            var devices = deviceEnumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active);
-            _microphone = devices.First(d => d.DataFlow == DataFlow.Capture);
+            float max = 0;
+            var buffer = new WaveBuffer(e.Buffer);
+            for (int index = 0; index < e.BytesRecorded / 4; index++)
+            {
+                var sample = buffer.FloatBuffer[index];
+
+                if (sample < 0) sample = -sample;
+                if (sample > max) max = sample;
+            }
+
+            UpdatedVolumeEvent?.Invoke(this, new VolumeUpdateEvent((int)(max * 100), max));
         }
         #endregion
 
@@ -78,7 +66,8 @@ namespace ClassNoiseMonitor
             {
                 if (disposing)
                 {
-                    _microphone?.Dispose();
+                    _waveIn?.StopRecording();
+                    _waveIn?.Dispose();
                 }
                 _disposedValue = true;
             }

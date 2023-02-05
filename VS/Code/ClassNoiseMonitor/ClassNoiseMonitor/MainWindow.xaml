@@ -13,14 +13,29 @@
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="Label">
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
+        <Label Grid.Row="0"
+               Grid.Column="0"
+               Content="Raw value:"/>
+        <Label Grid.Row="0"
+               Grid.Column="1"
+               Content="{Binding RawVolume}"/>
         <gauge:CircularGaugeControl Grid.Column="0" 
-                                    Grid.Row="0" 
+                                    Grid.Row="1" 
+                                    Grid.ColumnSpan="2"
                                     Radius="150" 
                                     ScaleRadius="110" 
                                     ScaleStartAngle="120" 
@@ -57,9 +72,8 @@
                                     DialText="Noise Meter"
                                     DialTextColor="Blue">
         </gauge:CircularGaugeControl>
-        <Label Grid.Row="1"
-               HorizontalContentAlignment="Center"
-               VerticalContentAlignment="Center"
+        <Label Grid.Row="2"
+               Grid.ColumnSpan="2"
                FontSize="24"
                FontWeight="Bold"
                Content="{Binding LabelContent}"/>

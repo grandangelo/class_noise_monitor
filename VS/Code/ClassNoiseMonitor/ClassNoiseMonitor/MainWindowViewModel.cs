@@ -15,9 +15,8 @@ namespace ClassNoiseMonitor
         #region Private Members
         private readonly CfgManager _cfgManager;
         private readonly Model _model;
-        private readonly CancellationTokenSource _cts;
-        private readonly Task _monitoringTask;
         private int _currentVolume;
+        private float _rawVolume;
         private string _lowNoiseMessage = string.Empty;
         private string _mediumNoiseMessage = string.Empty;
         private string _highNoiseMessage = string.Empty;
@@ -28,6 +27,7 @@ namespace ClassNoiseMonitor
         public int MediumNoiseThreshold { get; set; }
         public int HighNoiseThreshold { get; set; }
         public int CurrentVolume { get => _currentVolume; set { if (value == _currentVolume) return; _currentVolume = value; OnPropertyChanged(); } }
+        public float RawVolume { get => _rawVolume; set { if (value == _rawVolume) return; _rawVolume = value; OnPropertyChanged(); } }
         public string LabelContent { get => _labelContent; set { if (value == _labelContent) return; _labelContent = value; OnPropertyChanged(); } }
         #endregion
 
@@ -36,10 +36,9 @@ namespace ClassNoiseMonitor
         {
             _cfgManager = new CfgManager();
             ReadCfg();
-            _cts = new CancellationTokenSource();
             _model = new Model();
             _model.UpdatedVolumeEvent += OnUpdatedVolumeEvent;
-            _monitoringTask = Task.Run(() => _model.StartMonitoring(_cts.Token));
+            _model.StartMonitoring();
         }
         #endregion
 
@@ -63,6 +62,7 @@ namespace ClassNoiseMonitor
         private void OnUpdatedVolumeEvent(object? sender, VolumeUpdateEvent e)
         {
             CurrentVolume = e.UpdateVolume;
+            RawVolume = e.RawVolume;
             LabelContent = GetLabelContent();
         }
 
@@ -105,8 +105,7 @@ namespace ClassNoiseMonitor
             {
                 if (disposing)
                 {
-                    _cts.Cancel();
-                    _monitoringTask.Wait();
+                    _model?.Dispose();
                 }
                 _disposedValue = true;
             }
